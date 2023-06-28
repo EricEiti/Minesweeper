@@ -1,3 +1,5 @@
+import random
+
 # lets create a board object to represent the minesweeper game
 # this is so that we can just say "create a new board object", or
 # "dig here", or "render this game for this object"
@@ -20,6 +22,24 @@ class Board:
         # construct a new board based on the dim size and num bombs
         # we should construct the list of lists here (or whatever representation you prefer,
         # but since we have a 2-D board, list of lists is most natural)
+
+        # generate a new board
+        board = [[None for _ in range(self.dim_size)] for _ in range(self.dim_size)]
+
+        # plant the bombs
+        bombs_planted = 0
+        while bombs_planted < self.num_bombs:
+            loc = random.randint(0, self.dim_size**2 -1) # return a random integer N such that a <= N <= b
+            row = loc // self.dim_size  # we want the number of times dim_size goes into loc to tell us what row
+            col = loc % self.dim_size  # we want the remainder to tell us what index in the row 
+            if board[row][col] == '*':
+                # this means that we've actually planted a bomb here already so we keep going in the loop
+                # without incrementing bombs_planted
+                continue 
+            board[row][col] = '*'
+            bombs_planted += 1
+
+        return board
 
 #play the game
 def play(dim_size=10, num_bombs=10):
